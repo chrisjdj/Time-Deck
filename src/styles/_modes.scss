@@ -630,14 +630,11 @@
   }
   &.is-sel {
     background: var(--d-fg);
-    color: var(--d-bg, #000);
+    color: var(--d-on-fg);
   }
   &:hover {
     filter: brightness(1.25);
   }
-}
-:root[data-theme='light'] .deck .mcell.is-sel {
-  color: #fff;
 }
 
 // ---- world map ----

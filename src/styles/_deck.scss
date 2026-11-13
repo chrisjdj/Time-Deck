@@ -14,6 +14,7 @@
   --d-ok: var(--d-fg);
   --d-warn: #fbbf24;
   --d-danger: #f43f5e;
+  --d-on-fg: #06070b; // text drawn on top of a --d-fg fill
   --d-weight: 600;
   --d-track: -0.02em;
 
@@ -79,6 +80,7 @@
   --d-fg: #12131a;
   --d-warn: #d97706;
   --d-danger: #e11d48;
+  --d-on-fg: #fff;
 }
 
 // ---------- style: glass ----------
@@ -252,8 +254,13 @@
     font-style: italic;
   }
 }
+// LED stays a dark panel in light theme, so keep its lit colors.
 :root[data-theme='light'] .deck[data-style='led'] {
   --d-bg: #10130f;
+  --d-fg: var(--accent);
+  --d-warn: #fbbf24;
+  --d-danger: #f43f5e;
+  --d-on-fg: #06070b;
 }
 
 // ---------- style: high contrast ----------
@@ -266,6 +273,7 @@
   --d-border: #fff;
   --d-warn: #ff9d00;
   --d-danger: #ff3b3b;
+  --d-on-fg: #000;
   --d-weight: 800;
   --d-track: 0;
   .tile,
@@ -287,6 +295,61 @@
   --d-border: #000;
   --d-warn: #9a3412;
   --d-danger: #b91c1c;
+  --d-on-fg: #fff;
+}
+
+// ---------- custom background: text follows the background, not the theme ----------
+// Higher specificity than the theme/style rules above so a dark custom background
+// keeps light text in light theme (and vice versa).
+:root .deck.deck--custom-bg.deck--on-dark {
+  --d-fg: #f5f6fb;
+  --d-warn: #fbbf24;
+  --d-danger: #f43f5e;
+  --d-on-fg: #06070b;
+  &[data-style='neon'] {
+    --d-fg: color-mix(in srgb, var(--accent) 35%, #fff);
+  }
+  &[data-style='led'] {
+    --d-fg: var(--accent);
+  }
+  &[data-style='contrast'] {
+    --d-fg: #ffe600;
+    --d-muted: #fff;
+    --d-faint: #bbb;
+    --d-border: #fff;
+    --d-warn: #ff9d00;
+    --d-danger: #ff3b3b;
+    --d-on-fg: #000;
+  }
+}
+:root .deck.deck--custom-bg.deck--on-light {
+  --d-fg: #12131a;
+  --d-warn: #d97706;
+  --d-danger: #e11d48;
+  --d-on-fg: #fff;
+  &[data-style='neon'] {
+    --d-fg: color-mix(in srgb, var(--accent) 80%, #000);
+  }
+  &[data-style='led'] {
+    --d-fg: var(--accent);
+  }
+  &[data-style='contrast'] {
+    --d-fg: #000;
+    --d-muted: #000;
+    --d-faint: #333;
+    --d-border: #000;
+    --d-warn: #9a3412;
+    --d-danger: #b91c1c;
+    --d-on-fg: #fff;
+  }
+}
+// Glass/neon surfaces are tuned for one theme; recompute them from the text color.
+:root .deck.deck--custom-bg.deck--on-dark,
+:root .deck.deck--custom-bg.deck--on-light {
+  &[data-style='glass'] {
+    --d-surface: color-mix(in srgb, var(--d-fg) 8%, transparent);
+    --d-border: color-mix(in srgb, var(--d-fg) 18%, transparent);
+  }
 }
 
 // =============== shared display elements ===============
@@ -366,6 +429,10 @@
   }
 }
 .d-label {
+  color: var(--d-muted);
+}
+// App-chrome .muted uses the dashboard palette; inside the deck follow the display palette.
+.deck .muted {
   color: var(--d-muted);
 }
 .d-empty {

@@ -4,7 +4,7 @@ import { useDeck } from '../store/deck';
 import { DeckView } from '../components/DeckView';
 import { ControlBar } from '../components/ControlBar';
 import { HelpOverlay } from '../components/HelpOverlay';
-import { useFullscreen, useIdle } from '../hooks/misc';
+import { useFullscreen, useIdle, useResolvedTheme } from '../hooks/misc';
 import { useHotkeys } from '../hooks/useHotkeys';
 import { keepAwake, toggleFullscreen } from '../lib/browser';
 import { MODES, MODE_MAP } from '../modes';
@@ -63,7 +63,7 @@ export function DisplayPage({ params, standalone }: { params: DisplayParams; sta
     }
   };
 
-  const theme = document.documentElement.getAttribute('data-theme');
+  const theme = useResolvedTheme();
 
   return (
     <div className={'display' + (idle ? ' is-idle' : '') + (touch ? ' is-touch' : '')} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>

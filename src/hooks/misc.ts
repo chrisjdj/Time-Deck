@@ -35,11 +35,16 @@ export function useMediaQuery(q: string): boolean {
   return m;
 }
 
-/** Resolves the theme preference and applies data-theme to <html>. */
-export function useApplyTheme(): 'light' | 'dark' {
+/** The effective theme (preference resolved against the OS setting). Safe to use during render. */
+export function useResolvedTheme(): 'light' | 'dark' {
   const pref = useDeck((s) => s.themePref);
   const sysDark = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = pref === 'system' ? (sysDark ? 'dark' : 'light') : pref;
+  return pref === 'system' ? (sysDark ? 'dark' : 'light') : pref;
+}
+
+/** Resolves the theme preference and applies data-theme to <html>. */
+export function useApplyTheme(): 'light' | 'dark' {
+  const theme = useResolvedTheme();
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     try {

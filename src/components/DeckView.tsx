@@ -32,6 +32,27 @@ function useBgImage(id: string): string | null {
   return img && img.id === id ? img.url : null;
 }
 
+/** Relative luminance (0–1) of a #rgb / #rrggbb color; null if unparseable. */
+function luminance(hex: string): number | null {
+  let h = hex.trim().replace(/^#/, '');
+  if (h.length === 3) h = [...h].map((c) => c + c).join('');
+  if (!/^[0-9a-f]{6}$/i.test(h)) return null;
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const c = parseInt(h.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/** Whether a custom background is dark (text should be light) or light. */
+function bgTone(bg: string, c1: string, c2: string): 'dark' | 'light' | null {
+  if (bg === 'image') return 'dark'; // image gets a dark scrim (.deck--custom-bg::before)
+  const l1 = luminance(c1);
+  if (l1 === null) return null;
+  const l = bg === 'gradient' ? (l1 + (luminance(c2) ?? l1)) / 2 : l1;
+  return l < 0.45 ? 'dark' : 'light';
+}
+
 function PixelShift({ on, children }: { on: boolean; children: ReactNode }) {
   const now = useNow('minute');
   const m = Math.floor(now / 60000);
@@ -51,6 +72,8 @@ export function DeckView({ config, preview = false, params }: { config: DeckConf
   const img = useBgImage(a.bg === 'image' ? a.bgImageId : '');
   const embed = !!params?.embed;
   const transparent = !!params?.transparent;
+  const customBg = a.bg !== 'style' && !transparent;
+  const tone = customBg ? bgTone(a.bg, a.bgColor, a.bgColor2) : null;
 
   const style: Record<string, string | number> = {
     '--accent': params?.color || a.accent,
@@ -66,7 +89,13 @@ export function DeckView({ config, preview = false, params }: { config: DeckConf
   return (
     <DeckCtx.Provider value={{ appearance: a, preview, embed }}>
       <div
-        className={'deck' + (preview ? ' deck--preview' : '') + (transparent ? ' deck--transparent' : '') + (a.bg !== 'style' && !transparent ? ' deck--custom-bg' : '')}
+        className={
+          'deck' +
+          (preview ? ' deck--preview' : '') +
+          (transparent ? ' deck--transparent' : '') +
+          (customBg ? ' deck--custom-bg' : '') +
+          (customBg && tone ? ` deck--on-${tone}` : '')
+        }
         data-style={a.style}
         data-mode={config.mode}
         data-align={params?.align ?? 'center'}
