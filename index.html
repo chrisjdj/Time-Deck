@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d14" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="description" content="Time-Deck: full-screen clocks, countdowns, stopwatch with laps, world clocks, meeting planner, presenter and exam timers, pomodoro and alarms. Free, offline, no sign-up — runs entirely in your browser." />
+    <meta name="keywords" content="countdown timer, stopwatch, world clock, full screen clock, presenter timer, stage timer, exam timer, pomodoro, meeting planner, time zone converter, OBS timer overlay" />
+    <link rel="canonical" href="https://chrisjdj.github.io/web-tools/Time-Deck/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://chrisjdj.github.io/web-tools/Time-Deck/" />
+    <meta property="og:title" content="Time-Deck — Clocks, Timers & World Time, Full Screen" />
+    <meta property="og:description" content="Beautiful full-screen countdowns, stopwatch, world clocks and stage timers. Works offline, no server, no sign-up." />
+    <meta property="og:image" content="https://chrisjdj.github.io/web-tools/Time-Deck/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Time-Deck — Clocks, Timers & World Time, Full Screen" />
+    <meta name="twitter:description" content="Beautiful full-screen countdowns, stopwatch, world clocks and stage timers. Works offline." />
+    <meta name="twitter:image" content="https://chrisjdj.github.io/web-tools/Time-Deck/og-image.png" />
+
+    <title>Time-Deck — Clocks, Timers & World Time</title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Time-Deck",
+        "operatingSystem": "All",
+        "applicationCategory": "UtilitiesApplication",
+        "description": "Full-screen clocks, countdowns, stopwatch, world clocks, meeting planner, presenter and exam timers. Runs entirely in the browser.",
+        "url": "https://chrisjdj.github.io/web-tools/Time-Deck/",
+        "offers": { "@type": "Offer", "price": "0" }
+      }
+    </script>
+  </head>
+  <body>
+    <script>
+      // Apply the saved theme before first paint to avoid a light/dark flash.
+      (function () {
+        try {
+          var raw = localStorage.getItem('time-deck:v1');
+          var pref = raw ? JSON.parse(raw).themePref : 'system';
+          var t = pref === 'light' || pref === 'dark' ? pref : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+    <noscript>Time-Deck needs JavaScript to run.</noscript>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+// App chrome tokens (dashboard). Display tokens live in _deck.scss.
+:root {
+  --accent: #7c5cff;
+  --radius: 14px;
+  --radius-sm: 9px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --font-ui: 'Twemoji Country Flags', 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Twemoji Country Flags', 'Outfit Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  // dark (default)
+  --bg: #0b0d14;
+  --bg-2: #0f121b;
+  --panel: #131722;
+  --panel-2: #1a1f2d;
+  --panel-3: #222839;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #e9ebf3;
+  --muted: #8d93a8;
+  --faint: #5d6378;
+  --on-accent: #fff;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --focus: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f5fa;
+  --bg-2: #eceef5;
+  --panel: #ffffff;
+  --panel-2: #f3f4f9;
+  --panel-3: #e8eaf2;
+  --border: rgba(15, 23, 42, 0.09);
+  --border-strong: rgba(15, 23, 42, 0.18);
+  --text: #141724;
+  --muted: #5d6479;
+  --faint: #8e94a8;
+  --shadow: 0 10px 30px rgba(20, 24, 40, 0.1);
+  color-scheme: light;
+}
